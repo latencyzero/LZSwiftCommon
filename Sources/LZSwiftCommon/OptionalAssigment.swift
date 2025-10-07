@@ -8,7 +8,9 @@
 
 
 /**
-	Declare conformance to types to allow compact assignments of the form:
+	Assigns to the left-hand side only if the right-hand side is non-nil.
+	
+	This operator allows assignments of the form
 	
 	```swift
 	let newFoo: Optional<> = …	//	<something that might be nil>
@@ -16,16 +18,15 @@
 								//	otherwise value remains unchanged.
 	```
 	
-	With the following, more compact notation:
+	to be written with the following, more compact notation:
 	
 	```swift
 	foo ??= newFoo
 	```
 */
 
-infix operator ??= : AssignmentPrecedence
-
 @discardableResult
+public
 func
 ??=<T>(lhs: inout T, rhs: T?)
 	-> Bool
@@ -42,14 +43,18 @@ func
 	return didChange
 }
 
-/**
-	In order to have `Optional` types on the left-hand side of the
-	assignment, this extension is necessary.
-*/
+infix operator ??= : AssignmentPrecedence
 
+
+public
 extension
 Optional
 {
+	/**
+		In order to have `Optional` types on the left-hand side of the
+		assignment, this extension is necessary.
+	*/
+
 	static
 	func
 	??=(lhs: inout Optional, rhs: Optional)
@@ -61,10 +66,18 @@ Optional
 	}
 }
 
-infix operator ||= : AssignmentPrecedence
+/**
+	Shortcut for logical-or assignment.
+	
+	This should move elsewhere.
+*/
 
+public
 func
 ||=(lhs: inout Bool, rhs: Bool)
 {
 	lhs = lhs || rhs
 }
+
+infix operator ||= : AssignmentPrecedence
+
